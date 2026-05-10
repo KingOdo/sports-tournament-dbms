@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 function Login() {
   const [isSignup, setIsSignup] = useState(false);
