@@ -1,16 +1,45 @@
-# React + Vite
+# Sports Tournament Database Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project Sports Tournament DBMS, is a fully functional web-based system designed to manage sports tournaments, teams, players, matches, venues, and match results. The system allows users to store, view, insert, update, and delete tournament-related information using a cloud-based database.
 
-Currently, two official plugins are available:
+This project was developed for the CMPE344 Database Management Systems and Programming II course.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Technologies Used
 
-## React Compiler
+- React.js
+- Vite
+- JavaScript
+- CSS / Tailwind CSS
+- Supabase
+- PostgreSQL
+- GitHub
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Main Features
 
-## Expanding the ESLint configuration
+- User login and signup
+- Role-based users such as Admin, Manager, and Staff
+- Team management
+- Player management
+- Tournament management
+- Venue management
+- Match scheduling
+- Match result recording
+- View tournament and match information
+- Insert, update, and delete records from the database
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Database Tables
+
+The database includes the following tables:
+
+1. roles
+2. users
+3. teams
+4. players
+5. tournaments
+6. venues
+7. matches
+8. match_results
+
+## Database Platform
+
+The database is hosted using Supabase, which provides a cloud-based PostgreSQL database.
