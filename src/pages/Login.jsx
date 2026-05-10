@@ -25,7 +25,7 @@ function Login() {
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5">
                 <p className="text-sm text-gray-300">Current Focus</p>
                 <h2 className="text-xl font-semibold mt-1">
-                  Tournament Control Panel
+                  Tournament Management
                 </h2>
               </div>
 
