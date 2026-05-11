@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import Navbar from "./Navbar";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -118,75 +119,9 @@ console.log("TEST ERROR:", testError);
     loadDashboard();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/";
-  };
-
   return (
     <div className="min-h-screen bg-slate-100">
-      <div className="flex">
-        <aside className="hidden md:flex w-64 min-h-screen bg-slate-950 text-white flex-col p-6">
-          <h1 className="text-2xl font-bold mb-8">Sports DBMS</h1>
-
-          <nav className="space-y-3">
-            <a
-              href="/dashboard"
-              className="block bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Dashboard
-            </a>
-            <a
-              href="/teams"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Teams
-            </a>
-            <a
-              href="/players"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Players
-            </a>
-            <a
-              href="/tournaments"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Tournaments
-            </a>
-            <a
-              href="/venues"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Venues
-            </a>
-            <a
-              href="/matches"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Matches
-            </a>
-            <a
-              href="/results"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Results
-            </a>
-            <a
-              href="/reports"
-              className="block hover:bg-white/10 px-4 py-3 rounded-xl"
-            >
-              Reports
-            </a>
-          </nav>
-
-          <button
-            onClick={handleLogout}
-            className="mt-auto bg-red-600 hover:bg-red-700 px-4 py-3 rounded-xl font-semibold"
-          >
-            Logout
-          </button>
-        </aside>
+     <Navbar/>
 
         <main className="flex-1 p-6 md:p-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
@@ -306,7 +241,6 @@ console.log("TEST ERROR:", testError);
           )}
         </main>
       </div>
-    </div>
   );
 }
 
