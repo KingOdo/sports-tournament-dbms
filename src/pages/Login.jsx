@@ -4,44 +4,115 @@ import { supabase } from "../lib/supabaseClient";
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [message, setMessage] = useState("");
 
   const [isSignup, setIsSignup] = useState(false);
 
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [roleId, setRoleId] = useState("");
+
+  const [message, setMessage] = useState("");
+
+  const resetForm = () => {
+    setFullName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setRoleId("");
+    setMessage("");
+  };
+
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setMessage("");
-  navigate("/dashboard");
+    e.preventDefault();
+    setMessage("");
 
-  if (!email || !password) {
-    setMessage("Please enter email and password.");
-    return;
-  }
+    if (!email.trim() || !password.trim()) {
+      setMessage("Please enter your email and password.");
+      return;
+    }
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", email)
-    .eq("password", password)
-    .single();
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email.trim())
+      .eq("password", password)
+      .single();
 
-  if (error || !data) {
-    setMessage("Invalid email or password.");
-    return;
-  }
+    if (error || !data) {
+      setMessage("Invalid email or password.");
+      return;
+    }
 
-  localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("user", JSON.stringify(data));
+    navigate("/dashboard");
+  };
 
-  navigate("/dashboard");
-};
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (
+      !fullName.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmPassword.trim() ||
+      !roleId
+    ) {
+      setMessage("Please fill in all signup fields.");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setMessage("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
+
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email.trim())
+      .maybeSingle();
+
+    if (existingUser) {
+      setMessage("This email already exists. Please login instead.");
+      return;
+    }
+
+    const { error } = await supabase.from("users").insert([
+      {
+        full_name: fullName.trim(),
+        email: email.trim(),
+        password: password,
+        role_id: Number(roleId),
+      },
+    ]);
+
+    if (error) {
+      setMessage("Signup failed: " + error.message);
+      return;
+    }
+
+    setMessage("Account created successfully. You can now login.");
+    setIsSignup(false);
+    resetForm();
+  };
 
   return (
     <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl min-h-[90vh] grid md:grid-cols-2 bg-white rounded-3xl overflow-hidden shadow-2xl">
-        
-        <div className="hidden md:block relative bg-[url('/public/sports.jpeg')] bg-cover bg-center">
+        <div className="hidden md:block relative bg-[url('/sports.jpeg')] bg-cover bg-center">
           <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-black/65 to-black/85"></div>
 
           <div className="absolute inset-0 flex flex-col justify-between p-10 text-white">
@@ -93,7 +164,16 @@ const [message, setMessage] = useState("");
               {isSignup ? "Sign Up" : "Login"}
             </h2>
 
-            <form className="space-y-4" onSubmit={handleLogin}>
+            {message && (
+              <div className="mb-4 rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 text-sm text-slate-700">
+                {message}
+              </div>
+            )}
+
+            <form
+              className="space-y-4"
+              onSubmit={isSignup ? handleSignup : handleLogin}
+            >
               {isSignup && (
                 <div>
                   <label className="text-sm font-medium text-slate-700">
@@ -102,6 +182,8 @@ const [message, setMessage] = useState("");
                   <input
                     type="text"
                     placeholder="Enter your full name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900"
                   />
                 </div>
@@ -142,6 +224,8 @@ const [message, setMessage] = useState("");
                     <input
                       type="password"
                       placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900"
                     />
                   </div>
@@ -150,12 +234,16 @@ const [message, setMessage] = useState("");
                     <label className="text-sm font-medium text-slate-700">
                       Role
                     </label>
-                    <select className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900 bg-white">
-                      <option>Select role</option>
-                      <option>Admin</option>
-                      <option>Tournament Manager</option>
-                      <option>Referee</option>
-                      <option>Team Manager</option>
+                    <select
+                      value={roleId}
+                      onChange={(e) => setRoleId(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900 bg-white"
+                    >
+                      <option value="">Select role</option>
+                      <option value="1">Admin</option>
+                      <option value="2">Tournament Manager</option>
+                      <option value="3">Referee</option>
+                      <option value="4">Team Manager</option>
                     </select>
                   </div>
                 </>
@@ -173,7 +261,10 @@ const [message, setMessage] = useState("");
               {isSignup ? "Already have an account?" : "Don’t have an account?"}{" "}
               <button
                 type="button"
-                onClick={() => setIsSignup(!isSignup)}
+                onClick={() => {
+                  setIsSignup(!isSignup);
+                  resetForm();
+                }}
                 className="text-slate-900 font-semibold hover:underline"
               >
                 {isSignup ? "Login" : "Sign up"}
@@ -181,7 +272,6 @@ const [message, setMessage] = useState("");
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );

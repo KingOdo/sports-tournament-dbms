@@ -8,6 +8,7 @@ import Tournaments from "./pages/Tournament";
 import Venue from "./pages/Venue";
 import Matches from "./pages/Matches";
 import Results from "./pages/Results";
+
 function App() {
 
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/venues" element={<Venue />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/results" element={<Results />} />
+       
       </Routes>
     </BrowserRouter>
     </>

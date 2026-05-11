@@ -126,16 +126,10 @@ console.log("TEST ERROR:", testError);
         <main className="flex-1 p-6 md:p-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
-              <p className="text-slate-500 text-sm">Welcome back</p>
-              <h2 className="text-3xl font-bold text-slate-900">
+              <h5 className="text-slate-500 text-sm">Welcome back, {user.full_name}</h5>
+              <h2 className="text-3xl font-bold text-slate-900 m-top">
                 Tournament Dashboard
               </h2>
-
-              {user && (
-                <p className="text-slate-500 mt-1">
-                  Logged in as {user.full_name}
-                </p>
-              )}
             </div>
 
             <button
