@@ -35,6 +35,12 @@ function Dashboard() {
   };
 
   const fetchDashboardData = async () => {
+    const { data: testTeams, error: testError } = await supabase
+  .from("teams")
+  .select("*");
+
+console.log("TEST TEAMS:", testTeams);
+console.log("TEST ERROR:", testError);
     setLoading(true);
 
     const teamsCount = await getTableCount("teams");
