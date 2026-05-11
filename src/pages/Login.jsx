@@ -1,8 +1,41 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 
 function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [message, setMessage] = useState("");
+
   const [isSignup, setIsSignup] = useState(false);
+
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  setMessage("");
+  navigate("/dashboard");
+
+  if (!email || !password) {
+    setMessage("Please enter email and password.");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .eq("password", password)
+    .single();
+
+  if (error || !data) {
+    setMessage("Invalid email or password.");
+    return;
+  }
+
+  localStorage.setItem("user", JSON.stringify(data));
+
+  navigate("/dashboard");
+};
 
   return (
     <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4">
@@ -60,7 +93,7 @@ function Login() {
               {isSignup ? "Sign Up" : "Login"}
             </h2>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               {isSignup && (
                 <div>
                   <label className="text-sm font-medium text-slate-700">
@@ -81,6 +114,8 @@ function Login() {
                 <input
                   type="email"
                   placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900"
                 />
               </div>
@@ -92,6 +127,8 @@ function Login() {
                 <input
                   type="password"
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-slate-900"
                 />
               </div>
