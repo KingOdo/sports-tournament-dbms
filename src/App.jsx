@@ -3,6 +3,7 @@ import './App.css'
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Teams from "./pages/Teams";
+import Players from "./pages/Players";
 function App() {
 
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/teams" element={<Teams />} />
+        <Route path="/players" element={<Players />} />
       </Routes>
     </BrowserRouter>
     </>
